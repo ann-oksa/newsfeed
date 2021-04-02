@@ -7,6 +7,11 @@
 
 import UIKit
 
+protocol NewsFeedViewControllerDelegate: class {
+    func newsFeedViewControllerDidSelectArticle(withUrl: String, withArticle: Article)
+    func newsFeedViewControllerDidSelectFavorites()
+}
+
 class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, NewsViewModelDelegate {
     
     @IBOutlet weak var lastUpdateLAbel: UILabel!
@@ -18,6 +23,7 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     let newsViewModel: NewsViewModel
     let collectionViewCell = CollectionViewCell()
+    weak var delegate: NewsFeedViewControllerDelegate?
     
     init(viewModel: NewsViewModel) {
         self.newsViewModel = viewModel
@@ -41,7 +47,7 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
         stateChanged(state: newsViewModel.dataState)
         self.newsViewModel.showNewsByEverythingRequest()
        
-        
+        createToFavoriteArticleListButton()
     }
     
     @IBAction func reconnectClicked(_ sender: UIButton) {
@@ -65,6 +71,12 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let url = newsViewModel.modelsForNewsCell[indexPath.row].url
+        let article = newsViewModel.modelsForNewsCell[indexPath.row].article
+        delegate?.newsFeedViewControllerDidSelectArticle(withUrl: url, withArticle: article)
+    }
+    
 }
 
 extension NewsFeedViewController: UICollectionViewDelegateFlowLayout {
@@ -81,6 +93,18 @@ extension NewsFeedViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension NewsFeedViewController {
+    
+    func createToFavoriteArticleListButton() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Favorite",
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(toFavoriteListClicked))
+        navigationItem.rightBarButtonItem?.tintColor = .availableColor
+    }
+    
+    @objc func toFavoriteListClicked() {
+        delegate?.newsFeedViewControllerDidSelectFavorites()
+    }
     
     func updateDataForShowingNews() {
         collectionViewOfNews.reloadData()
@@ -118,7 +142,6 @@ extension NewsFeedViewController {
             view.backgroundColor = .loadingColor
             
         case .available:
-            
             indicatorrOfDownloading.isHidden = true
             indicatorrOfDownloading.stopAnimating()
             connectionStatusLabel.isHidden = true

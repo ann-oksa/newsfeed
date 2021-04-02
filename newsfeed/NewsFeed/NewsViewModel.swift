@@ -24,7 +24,7 @@ class NewsViewModel {
         
     }
     
-    var everything = GoogleNewsEverythingRequest(topic: "Grammy", dateFrom: "2021-03-17", dateTo: "2021-03-17", sortCriteria: .popularity)
+    private  var everything = GoogleNewsEverythingRequest(topic: "Grammy", dateFrom: "2021-03-25", dateTo: "2021-03-25", sortCriteria: .popularity)
     
     var modelsForNewsCell = [ModelForNewsCell]()
     var titleForNews = String()
@@ -82,6 +82,7 @@ class NewsViewModel {
             switch response {
             case .success(let result) :
                 var indexOfAppendingArticle: Int = 0
+                // print time unix
                 for article in result.articles {
                     let modelForNewsCell = ModelForNewsCell(article: article)
                     self.modelsForNewsCell.append(modelForNewsCell)
@@ -90,12 +91,14 @@ class NewsViewModel {
                         break
                     }
                 }
+                // print time unix
                 
                 
                 self.lastUpdate = "Last update: \(String(describing: Date().timeAgoDisplay() ))"
                 self.titleForNews = self.everything.topic
                 self.delegate?.setTitleForNews(newsTitle: self.titleForNews)
                 self.dataState = .available
+                
                 
             case .failure(let error) :
                 print("NewsViewModel -> showNewsByEverythingRequest -> can`t get successful result frrom response. Error \(error.code): \(error.message)")
