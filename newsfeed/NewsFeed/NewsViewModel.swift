@@ -74,15 +74,18 @@ class NewsViewModel {
         })
     }
     
+    
+    
     func showNewsByEverythingRequest() {
         
         self.dataState = .loading
         googleNewsAPI.fetchEverythingRequest(googleNewsEverythingRequest: everything) { (response) in
-            
             switch response {
             case .success(let result) :
                 var indexOfAppendingArticle: Int = 0
+             
                 // print time unix
+                print(NSDate().timeIntervalSince1970)
                 for article in result.articles {
                     let modelForNewsCell = ModelForNewsCell(article: article)
                     self.modelsForNewsCell.append(modelForNewsCell)
@@ -92,7 +95,7 @@ class NewsViewModel {
                     }
                 }
                 // print time unix
-                
+                print(NSDate().timeIntervalSince1970)
                 
                 self.lastUpdate = "Last update: \(String(describing: Date().timeAgoDisplay() ))"
                 self.titleForNews = self.everything.topic

@@ -42,10 +42,10 @@ class ModelForNewsCell {
         }
         do {
             //
-            DispatchQueue.global().async {
-                let data = try! Data(contentsOf: url)
-                self.dataForImage = data
-            }
+//            DispatchQueue.global().async {
+//                let data = try! Data(contentsOf: url)
+//                self.dataForImage = data
+//            }
             
         } catch {
             print("ModelForNewsCell -> createDataForImage -> can`t get data from url:  \(error.localizedDescription)")
