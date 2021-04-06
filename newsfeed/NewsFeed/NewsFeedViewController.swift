@@ -13,6 +13,8 @@ protocol NewsFeedViewControllerDelegate: class {
 }
 
 class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, NewsViewModelDelegate {
+   
+    
     
     @IBOutlet weak var lastUpdateLAbel: UILabel!
     @IBOutlet weak var networkStatusLabel: UILabel!
@@ -22,7 +24,6 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
     @IBOutlet weak var collectionViewOfNews: UICollectionView!
     
     let newsViewModel: NewsViewModel
-    let collectionViewCell = CollectionViewCell()
     weak var delegate: NewsFeedViewControllerDelegate?
     
     init(viewModel: NewsViewModel) {

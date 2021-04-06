@@ -7,6 +7,10 @@
 
 import Foundation
 
+protocol ModelForNewsCellDelegate: class {
+    func reloadImageWithData(_ data: Data?)
+}
+
 class ModelForNewsCell {
     
     let article: Article
@@ -19,6 +23,8 @@ class ModelForNewsCell {
     var dataForImage : Data? 
     var date = Date()
     var stringDateForShowingTimeAgo = String()
+    
+    weak var delegate: ModelForNewsCellDelegate?
     
     init(article: Article) {
         self.article = article
@@ -33,22 +39,24 @@ class ModelForNewsCell {
         }
         stringDateForShowingTimeAgo = date.timeAgoDisplay()
         
-        createDataForImage(stringForImage: imageURL)
+        loadDataForImage(stringForImage: imageURL)
     }
     
-    func createDataForImage(stringForImage: String) {
+    func loadDataForImage(stringForImage: String) {
         guard let url = URL(string: stringForImage) else {
             return
         }
-        do {
-            //
-//            DispatchQueue.global().async {
-//                let data = try! Data(contentsOf: url)
-//                self.dataForImage = data
-//            }
-            
-        } catch {
-            print("ModelForNewsCell -> createDataForImage -> can`t get data from url:  \(error.localizedDescription)")
+        DispatchQueue.global().async {
+            do {
+                let data = try Data(contentsOf: url)
+                self.dataForImage = data
+                DispatchQueue.main.async {
+                    self.delegate?.reloadImageWithData(self.dataForImage)
+                }
+            }
+            catch {
+                print("ModelForNewsCell -> createDataForImage -> can`t get data from url:  \(error.localizedDescription)")
+            }
         }
     }
     
@@ -60,5 +68,6 @@ class ModelForNewsCell {
         let outputDate = dateFormatter.date(from:isoDate)
         return outputDate
     }
+    
     
 }

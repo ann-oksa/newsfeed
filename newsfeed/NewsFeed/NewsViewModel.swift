@@ -24,7 +24,7 @@ class NewsViewModel {
         
     }
     
-    private  var everything = GoogleNewsEverythingRequest(topic: "Grammy", dateFrom: "2021-03-25", dateTo: "2021-03-25", sortCriteria: .popularity)
+    private  var everything = GoogleNewsEverythingRequest(topic: "Grammy", dateFrom: "2021-04-05", dateTo: "2021-04-05", sortCriteria: .popularity)
     
     var modelsForNewsCell = [ModelForNewsCell]()
     var titleForNews = String()
@@ -74,7 +74,15 @@ class NewsViewModel {
         })
     }
     
+    func getCurrentDate() {
+        let date = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "H:m:ss.SSS"
+        let result = dateFormatter.string(from: date)
+        print(result)
+    }
     
+
     
     func showNewsByEverythingRequest() {
         
@@ -84,8 +92,8 @@ class NewsViewModel {
             case .success(let result) :
                 var indexOfAppendingArticle: Int = 0
              
-                // print time unix
-                print(NSDate().timeIntervalSince1970)
+                self.getCurrentDate()
+                
                 for article in result.articles {
                     let modelForNewsCell = ModelForNewsCell(article: article)
                     self.modelsForNewsCell.append(modelForNewsCell)
@@ -94,8 +102,7 @@ class NewsViewModel {
                         break
                     }
                 }
-                // print time unix
-                print(NSDate().timeIntervalSince1970)
+                self.getCurrentDate()
                 
                 self.lastUpdate = "Last update: \(String(describing: Date().timeAgoDisplay() ))"
                 self.titleForNews = self.everything.topic
