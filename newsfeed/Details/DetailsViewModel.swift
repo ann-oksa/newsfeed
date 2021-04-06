@@ -55,6 +55,7 @@ class DetailsViewModel {
     
     private func addArticleToList() {
         favoriteArticles.append(article)
+        print("DetailsVM add article to list: art append")
         articlesGateway.writeArticles(favoriteArticles)
     }
 }

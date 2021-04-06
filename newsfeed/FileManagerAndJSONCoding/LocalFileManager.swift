@@ -22,6 +22,7 @@ class LocalFileManager {
         do {
             let url = documentDirectory().appendingPathComponent(favoriteArticle)
             try data.write(to: url)
+            print("LocalFM create data: data write")
         }
         catch {
             print("LocalFileManager -> getData: error \(error)")
@@ -30,14 +31,17 @@ class LocalFileManager {
     
     func readData() -> Data? {
         let url = documentDirectory().appendingPathComponent(favoriteArticle)
-        print("pass")
-        print(url.path)
+        print("LocalFM url")
+        
         do {
             let data = try Data(contentsOf: url)
+            print("LocalFM read data: have data")
             return data
             
         } catch {
             print(error)
+            print("LocalFM read data: no data")
+// not return
             return nil
         }
     }

@@ -28,7 +28,6 @@ class FavoritesViewModel {
     
     private let articlesGateway =  ArticlesGateway()
     weak var delegate: FavoriteViewModelProtocol?
-    //set observer
     var articles = [Article]()
     
     let title = "Favorites"
@@ -36,12 +35,15 @@ class FavoritesViewModel {
     
     
     init() {
-        self.favoriteListState = .empty
+//        self.favoriteListState = .empty
         if let articles = articlesGateway.readArticles() {
             self.articles = articles
+            print("FAvoriteVM init have articles")
             self.favoriteListState = .available
         } else {
             self.articles = []
+            print("FAvoriteVM init no articles")
+
             self.favoriteListState = .empty
         }
         self.delegate?.updateDataForShowingNews()
