@@ -8,7 +8,7 @@
 import Foundation
 
 protocol ModelForNewsCellDelegate: class {
-    func reloadImageWithData(_ data: Data?)
+    func dataForReloadingImage(_ data: Data?)
 }
 
 class ModelForNewsCell {
@@ -51,7 +51,7 @@ class ModelForNewsCell {
                 let data = try Data(contentsOf: url)
                 self.dataForImage = data
                 DispatchQueue.main.async {
-                    self.delegate?.reloadImageWithData(self.dataForImage)
+                    self.delegate?.dataForReloadingImage(self.dataForImage)
                 }
             }
             catch {

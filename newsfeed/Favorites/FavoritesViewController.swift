@@ -41,7 +41,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let  nib = UINib(nibName: FavoritesTableViewCell.reuseIdentifier, bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: FavoritesTableViewCell.reuseIdentifier)
-        favoritesViewModel.setArticlesState()
+        favoritesViewModel.refreshArticlesState()
         updateDataForShowingNews()
     }
     
@@ -75,14 +75,13 @@ extension FavoritesViewController: FavoriteViewModelProtocol {
             case .available:
                 self.tableView.isHidden = false
                 self.messageLabel.isHidden = true
-               self.tableView.reloadData()
-
+               
             case .empty:
                 self.tableView.isHidden = true
                 self.messageLabel.isHidden = false
                 self.messageLabel.text = self.favoritesViewModel.messageNoFavoriteArticles
-                self.tableView.reloadData()
         }
+        self.tableView.reloadData()
      
     }
     

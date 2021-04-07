@@ -37,7 +37,7 @@ class FavoritesViewModel {
     self.favoriteListState = .empty
    }
     
-    func setArticlesState() {
+    func refreshArticlesState() {
         if let articles = articlesGateway.readArticles() {
             self.articles = articles
             self.favoriteListState = .available
