@@ -46,7 +46,6 @@ class DetailsViewModel {
         }
         favoriteArticles = savedArticleList
         if favoriteArticles.contains(article) {
-            print("have already had")
             delegate?.favoriteListHasAlreadyHadThisArticle()
         } else {
             addArticleToList()
@@ -55,7 +54,6 @@ class DetailsViewModel {
     
     private func addArticleToList() {
         favoriteArticles.append(article)
-        print("DetailsVM add article to list: art append")
         articlesGateway.writeArticles(favoriteArticles)
     }
 }

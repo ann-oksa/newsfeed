@@ -73,17 +73,7 @@ class NewsViewModel {
             self.isInternetOn = true
         })
     }
-    
-    func getCurrentDate() {
-        let date = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "H:m:ss.SSS"
-        let result = dateFormatter.string(from: date)
-        print(result)
-    }
-    
 
-    
     func showNewsByEverythingRequest() {
         
         self.dataState = .loading
@@ -91,9 +81,6 @@ class NewsViewModel {
             switch response {
             case .success(let result) :
                 var indexOfAppendingArticle: Int = 0
-             
-                self.getCurrentDate()
-                
                 for article in result.articles {
                     let modelForNewsCell = ModelForNewsCell(article: article)
                     self.modelsForNewsCell.append(modelForNewsCell)
@@ -102,8 +89,6 @@ class NewsViewModel {
                         break
                     }
                 }
-                self.getCurrentDate()
-                
                 self.lastUpdate = "Last update: \(String(describing: Date().timeAgoDisplay() ))"
                 self.titleForNews = self.everything.topic
                 self.delegate?.setTitleForNews(newsTitle: self.titleForNews)

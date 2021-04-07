@@ -176,10 +176,8 @@
 				22887ECA25D121EC002CFF65 /* SceneDelegate.swift */,
 				CAC16FA226130FE5002D62EE /* FileManagerAndJSONCoding */,
 				CA1A665A25DBF870009ACF86 /* Coordinators */,
-				CAC16F93260BA218002D62EE /* FavoritesCell */,
 				CAC16F80260B9D22002D62EE /* Favorites */,
 				CA280F1B2603912400A4CB35 /* Details */,
-				CA5BEADE25DD8D7B00AAAB64 /* CellForNews */,
 				CA1A665625DBF863009ACF86 /* NewsFeed */,
 				CA4C3A0D25F6536300416368 /* Reachability */,
 				CA1A65C225D15A8D009ACF86 /* NetworkFiles */,
@@ -244,6 +242,7 @@
 		CA1A665625DBF863009ACF86 /* NewsFeed */ = {
 			isa = PBXGroup;
 			children = (
+				CA5BEADE25DD8D7B00AAAB64 /* CellForNews */,
 				CA1A664425DAC6FC009ACF86 /* NewsViewModel.swift */,
 				CA1A666A25DD4784009ACF86 /* NewsFeedViewController.swift */,
 				CA1A666B25DD4784009ACF86 /* NewsFeedViewController.xib */,
@@ -294,6 +293,7 @@
 		CAC16F80260B9D22002D62EE /* Favorites */ = {
 			isa = PBXGroup;
 			children = (
+				CAC16F93260BA218002D62EE /* FavoritesCell */,
 				CAC16F84260B9E58002D62EE /* FavoritesViewModel.swift */,
 				CAC16F79260B9D10002D62EE /* FavoritesViewController.swift */,
 				CAC16F7A260B9D10002D62EE /* FavoritesViewController.xib */,

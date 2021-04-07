@@ -17,7 +17,6 @@ class FavoritesViewModel {
     enum FavoriteListAvailabilityState {
         case empty
         case available
-        
     }
     
     var favoriteListState: FavoriteListAvailabilityState {
@@ -35,18 +34,17 @@ class FavoritesViewModel {
     
     
     init() {
-//        self.favoriteListState = .empty
+    self.favoriteListState = .empty
+   }
+    
+    func setArticlesState() {
         if let articles = articlesGateway.readArticles() {
             self.articles = articles
-            print("FAvoriteVM init have articles")
             self.favoriteListState = .available
         } else {
             self.articles = []
-            print("FAvoriteVM init no articles")
-
             self.favoriteListState = .empty
         }
-        self.delegate?.updateDataForShowingNews()
     }
     
 }

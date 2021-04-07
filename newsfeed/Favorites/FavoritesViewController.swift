@@ -41,7 +41,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let  nib = UINib(nibName: FavoritesTableViewCell.reuseIdentifier, bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: FavoritesTableViewCell.reuseIdentifier)
-        stateChanged(state: .empty)
+        favoritesViewModel.setArticlesState()
         updateDataForShowingNews()
     }
     
@@ -59,7 +59,6 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let article = favoritesViewModel.articles[indexPath.row]
         delegate?.favoritesViewControllerDidSelectArticle(article)
-        
     }
  
 }
@@ -67,29 +66,22 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
 extension FavoritesViewController: FavoriteViewModelProtocol {
     
     func updateDataForShowingNews() {
-        print("reload")
         tableView.reloadData()
-        
     }
     
     func stateChanged(state: FavoritesViewModel.FavoriteListAvailabilityState) {
        tableView.reloadData()
             switch state {
             case .available:
-                print("available")
                 self.tableView.isHidden = false
                 self.messageLabel.isHidden = true
-               // self.tableView.reloadData()
+               self.tableView.reloadData()
 
             case .empty:
-                print("no such file")
-                self.tableView.isHidden = false
+                self.tableView.isHidden = true
                 self.messageLabel.isHidden = false
                 self.messageLabel.text = self.favoritesViewModel.messageNoFavoriteArticles
                 self.tableView.reloadData()
-                
-            
-            
         }
      
     }
