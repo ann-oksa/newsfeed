@@ -7,7 +7,11 @@
 
 import UIKit
 
-class CollectionViewCell: UICollectionViewCell {
+
+
+class CollectionViewCell: UICollectionViewCell, ModelForNewsCellDelegate {
+   
+    
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var dateLabel: UILabel!
@@ -19,14 +23,17 @@ class CollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = "CollectionViewCell"
     static let nibName = reuseIdentifier
 
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-   
+        
     }
     
     
     
+    
     func fill(news: ModelForNewsCell) {
+        news.delegate = self
         dateLabel.text = news.stringDateForShowingTimeAgo
         autorLabel.text = news.autor
         nameOfArticleLabel.text = news.title
@@ -35,9 +42,18 @@ class CollectionViewCell: UICollectionViewCell {
         imageView.image = UIImage(named: "picture")
         
         if let data = news.dataForImage {
-            imageView.image = UIImage(data: data)
+            dataForReloadingImage(data)
         }
-        
-       
     }
+    
+    func dataForReloadingImage(_ data: Data?) {
+        if let data = data {
+            setImageFromData(data)
+        }
+    }
+    
+    func setImageFromData(_ data: Data) {
+        imageView.image = UIImage(data: data)
+    }
+    
 }

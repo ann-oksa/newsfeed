@@ -29,7 +29,8 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     override func viewDidLoad() {
-        super.viewDidLoad()        
+        super.viewDidLoad()
+        
         messageLabel.isHidden = true
         
         tableView.delegate = self
@@ -40,6 +41,8 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let  nib = UINib(nibName: FavoritesTableViewCell.reuseIdentifier, bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: FavoritesTableViewCell.reuseIdentifier)
+        favoritesViewModel.refreshArticlesState()
+        updateDataForShowingNews()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -56,7 +59,6 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let article = favoritesViewModel.articles[indexPath.row]
         delegate?.favoritesViewControllerDidSelectArticle(article)
-        
     }
  
 }
@@ -67,19 +69,20 @@ extension FavoritesViewController: FavoriteViewModelProtocol {
         tableView.reloadData()
     }
     
-    func stateChanged(_ state: FavoritesViewModel.FavoriteListAvailabilityState) {
-        switch state {
-        case .empty:
-            print("no such file")
-            tableView.isHidden = true
-            messageLabel.isHidden = false
-            messageLabel.text = favoritesViewModel.messageNoFavoriteArticles
-            
-        case .available:
-            print("available")
-            tableView.isHidden = false
-            messageLabel.isHidden = true
+    func stateChanged(state: FavoritesViewModel.FavoriteListAvailabilityState) {
+       tableView.reloadData()
+            switch state {
+            case .available:
+                self.tableView.isHidden = false
+                self.messageLabel.isHidden = true
+               
+            case .empty:
+                self.tableView.isHidden = true
+                self.messageLabel.isHidden = false
+                self.messageLabel.text = self.favoritesViewModel.messageNoFavoriteArticles
         }
+        self.tableView.reloadData()
+     
     }
     
 }

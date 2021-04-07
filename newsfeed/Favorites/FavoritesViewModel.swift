@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FavoriteViewModelProtocol: class {
-    func stateChanged(_ state: FavoritesViewModel.FavoriteListAvailabilityState )
+    func stateChanged(state: FavoritesViewModel.FavoriteListAvailabilityState )
     func updateDataForShowingNews()
 }
 
@@ -17,21 +17,16 @@ class FavoritesViewModel {
     enum FavoriteListAvailabilityState {
         case empty
         case available
-        
     }
     
     var favoriteListState: FavoriteListAvailabilityState {
-        
-            didSet {
-                delegate?.stateChanged(favoriteListState)
-            }
-        
-        
+        didSet {
+            delegate?.stateChanged(state: favoriteListState)
+        }
     }
     
-   private let articlesGateway =  ArticlesGateway()
+    private let articlesGateway =  ArticlesGateway()
     weak var delegate: FavoriteViewModelProtocol?
-    //set observer
     var articles = [Article]()
     
     let title = "Favorites"
@@ -39,13 +34,17 @@ class FavoritesViewModel {
     
     
     init() {
+    self.favoriteListState = .empty
+   }
+    
+    func refreshArticlesState() {
         if let articles = articlesGateway.readArticles() {
             self.articles = articles
             self.favoriteListState = .available
         } else {
             self.articles = []
             self.favoriteListState = .empty
-            delegate?.updateDataForShowingNews()
         }
     }
+    
 }

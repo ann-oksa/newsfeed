@@ -29,7 +29,6 @@ class ArticlesGateway: FileManagerWritingAndReadingArticle {
         do {
             let articles = try decoder.decode([Article].self, from: data)
             return articles
-            
         } catch {
             print("NewsSaver -> readArticle error \(error)")
             return nil

@@ -33,6 +33,7 @@ class DetailsViewController: UIViewController, WKUIDelegate {
         super.viewDidLoad()
         
         detailsViewModel.delegate = self
+        
         title = detailsViewModel.articleTitle
         webView.load(detailsViewModel.myRequestForShowingNews())
         
