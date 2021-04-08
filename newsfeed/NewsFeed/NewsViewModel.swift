@@ -23,8 +23,9 @@ class NewsViewModel {
         case available
         
     }
-    
-    private  var everything = GoogleNewsEverythingRequest(topic: "Grammy", dateFrom: "2021-04-05", dateTo: "2021-04-05", sortCriteria: .popularity)
+       
+    let requestText = "Grammy"
+    var everything = GoogleNewsEverythingRequest(topic: "Sun", dateFrom: Date().currentDate(), dateTo: Date().currentDate(), sortCriteria: .popularity)
     
     var modelsForNewsCell = [ModelForNewsCell]()
     var titleForNews = String()
@@ -74,10 +75,15 @@ class NewsViewModel {
         })
     }
 
-    func showNewsByEverythingRequest() {
+    
+    
+    func showNewsByEverythingRequest(with text: String) {
+        everything.topic = text.isEmpty ? self.requestText : text
         
+        modelsForNewsCell = []
         self.dataState = .loading
         googleNewsAPI.fetchEverythingRequest(googleNewsEverythingRequest: everything) { (response) in
+            
             switch response {
             case .success(let result) :
                 var indexOfAppendingArticle: Int = 0
@@ -130,6 +136,16 @@ class NewsViewModel {
 }
 
 extension Date {
+    
+    func currentDate() -> String {
+        let now = Date()
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone.current
+        formatter.dateFormat = "yyyy-MM-dd"
+        let dateString = formatter.string(from: now)
+        return dateString
+    }
+    
     func timeAgoDisplay() -> String {
         
         let calendar = Calendar.current

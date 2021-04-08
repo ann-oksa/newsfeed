@@ -17,7 +17,7 @@ struct GoogleNewsEverythingRequest: CreatorQueryItemsProtocol {
         case publishedAt = "publishedAt"
     }
     
-    let topic: String
+    var topic: String
     let dateFrom: String
     let dateTo: String
     let sortCriteria: SortCriteria
