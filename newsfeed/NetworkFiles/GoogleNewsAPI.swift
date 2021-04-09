@@ -22,7 +22,7 @@ class GoogleNewsAPI {
         creator = URLCreator(baseUrl: baseUrl, apiKey: apiKey, version: version)
     }
     
-    func fetchEverythingRequest(googleNewsEverythingRequest : GoogleNewsEverythingRequest, completionHandler: @escaping (Result <NewsResponse, ErrorsFormatForHTTPSRequest> ) -> Void) {
+    func fetchNewsByRequest(_ googleNewsEverythingRequest : GoogleNewsEverythingRequest, completionHandler: @escaping (Result <NewsResponse, ErrorsFormatForHTTPSRequest> ) -> Void) {
         
         guard let url = creator.createURL(endpoint: Endpoints.everything, queryItems: googleNewsEverythingRequest) else {
             let error = ErrorsFormatForHTTPSRequest(status: "Error",

@@ -106,6 +106,7 @@ extension NewsFeedViewController: UISearchControllerDelegate, UISearchBarDelegat
         searchController.searchBar.placeholder = "News, music, books..."
         searchController.searchBar.sizeToFit()
         searchController.searchBar.becomeFirstResponder()
+        searchController.searchBar.text = newsViewModel.requestText
         
         self.navigationItem.titleView = searchController.searchBar
     }
