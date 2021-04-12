@@ -10,7 +10,7 @@
 import Foundation
 
 struct GoogleNewsEverythingRequest: CreatorQueryItemsProtocol {
-   //page page size
+   
     enum SortCriteria: String {
         case popularity = "popularity"
         case relevancy = "relevancy"

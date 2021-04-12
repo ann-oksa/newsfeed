@@ -9,21 +9,18 @@ import Foundation
 
 extension Date {
     
-    func dateTwoDaysAgo() -> String {
-        guard let date = Calendar.current.date(byAdding: .day, value: -2, to: Date()) else {
-            return Date().convertDateToString(from: Date())
-            
-        }
-        let stringDate = convertDateToString(from: date)
-        return stringDate
+    
+    
+    func dateTwoDaysAgo() -> Date? {
+        let date = Calendar.current.date(byAdding: .day, value: -2, to: self)
+        return date
     }
     
-    func convertDateToString(from: Date) -> String {
-       // let now = Date()
+    func convertedToString() -> String {
         let formatter = DateFormatter()
         formatter.timeZone = TimeZone.current
         formatter.dateFormat = "yyyy-MM-dd"
-        let dateString = formatter.string(from: from)
+        let dateString = formatter.string(from: self)
         return dateString
     }
     

@@ -66,22 +66,31 @@ class NewsViewModel {
         isInternetOn = Network.reachability.isReachable
         
         //This two dispatch we use only for test to check whether the status has changed because Reachability file doesn`t work on simulator
+        #if targetEnvironment(simulator)
         DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
             self.isInternetOn = false
         })
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
             self.isInternetOn = true
         })
+        #endif
+        
     }
     
-    
+    func newsFromTodayToTwoDaysAgo(text: String) -> GoogleNewsEverythingRequest {
+        let currentDate = Date()
+        let today = currentDate.convertedToString()
+        let twoDaysAgo = currentDate.dateTwoDaysAgo()?.convertedToString() ?? today
+        
+        let newsRequest = GoogleNewsEverythingRequest(topic: text, dateFrom: today, dateTo: twoDaysAgo , sortCriteria: .popularity)
+        return newsRequest
+    }
     
     func showNewsByEverythingRequest(with text: String) {
         
         requestText = text
-        let currentDate = Date().convertDateToString(from: Date())
-        let twoDaysAgo = Date().dateTwoDaysAgo()
-        let newsRequest = GoogleNewsEverythingRequest(topic: requestText, dateFrom: currentDate, dateTo: twoDaysAgo , sortCriteria: .popularity)
+        
+        let newsRequest = newsFromTodayToTwoDaysAgo(text: requestText)
         
         modelsForNewsCell = []
         self.dataState = .loading
@@ -92,7 +101,6 @@ class NewsViewModel {
                 var indexOfAppendingArticle: Int = 0
                 for article in result.articles {
                     let modelForNewsCell = ModelForNewsCell(article: article)
-                    // modelsForNewsCell = []
                     self.modelsForNewsCell.append(modelForNewsCell)
                     indexOfAppendingArticle += 1
                     if indexOfAppendingArticle > newsRequest.pageSize - 1 {
