@@ -42,11 +42,11 @@ class CollectionViewCell: UICollectionViewCell, ModelForNewsCellDelegate {
         imageView.image = UIImage(named: "picture")
         
         if let data = news.dataForImage {
-            dataForReloadingImage(data)
+            didFinishLoadImageData(data)
         }
     }
     
-    func dataForReloadingImage(_ data: Data?) {
+    func didFinishLoadImageData(_ data: Data?) {
         if let data = data {
             setImageFromData(data)
         }

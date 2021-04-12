@@ -46,6 +46,7 @@ class DetailsViewModel {
         }
         favoriteArticles = savedArticleList
         if favoriteArticles.contains(article) {
+            print("has already had")
             delegate?.favoriteListHasAlreadyHadThisArticle()
         } else {
             addArticleToList()

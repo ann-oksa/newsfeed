@@ -13,7 +13,6 @@ protocol NewsFeedViewControllerDelegate: class {
 }
 
 class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, NewsViewModelDelegate {
-   
     
     
     @IBOutlet weak var lastUpdateLAbel: UILabel!
@@ -23,6 +22,7 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
     @IBOutlet weak var indicatorrOfDownloading: UIActivityIndicatorView!
     @IBOutlet weak var collectionViewOfNews: UICollectionView!
     
+    let searchController = UISearchController(searchResultsController: nil)
     let newsViewModel: NewsViewModel
     weak var delegate: NewsFeedViewControllerDelegate?
     
@@ -46,14 +46,16 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
         let  nib = UINib(nibName: CollectionViewCell.reuseIdentifier, bundle: nil)
         collectionViewOfNews.register(nib, forCellWithReuseIdentifier: CollectionViewCell.reuseIdentifier)
         stateChanged(state: newsViewModel.dataState)
-        self.newsViewModel.showNewsByEverythingRequest()
-       
+        self.newsViewModel.showNewsByEverythingRequest(with: newsViewModel.requestText)
+        
         createToFavoriteArticleListButton()
+        setSearchControllerSettings()
+        
     }
     
     @IBAction func reconnectClicked(_ sender: UIButton) {
         stateChanged(state: newsViewModel.dataState)
-        newsViewModel.showNewsByEverythingRequest()
+        newsViewModel.showNewsByEverythingRequest(with: newsViewModel.requestText)
     }
     
     override func viewWillLayoutSubviews() {
@@ -91,6 +93,35 @@ extension NewsFeedViewController: UICollectionViewDelegateFlowLayout {
         layout.itemSize =  itemSizeForEachCell
         return  layout.itemSize
     }
+}
+
+extension NewsFeedViewController: UISearchControllerDelegate, UISearchBarDelegate {
+    
+    func setSearchControllerSettings() {
+        searchController.delegate = self
+        searchController.searchBar.delegate = self
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.dimsBackgroundDuringPresentation = true
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "News, music, books..."
+        searchController.searchBar.sizeToFit()
+        searchController.searchBar.becomeFirstResponder()
+        searchController.searchBar.text = newsViewModel.requestText
+        
+        self.navigationItem.titleView = searchController.searchBar
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if let text = searchBar.text {
+            newsViewModel.showNewsByEverythingRequest(with: text)
+        }
+        collectionViewOfNews.reloadData()
+    }
+    
 }
 
 extension NewsFeedViewController {
@@ -159,6 +190,6 @@ extension UIColor {
     static  let availableColor = UIColor(red: 105.0/255.0, green: 130.0/255.0, blue: 220.0/255.0, alpha: 1.0)
     static  let loadingColor = UIColor(red: 125.0/255.0, green: 190.0/255.0, blue: 110.0/255.0, alpha: 1.0)
     static  let emptyColor = UIColor(red: 195.0/255.0, green: 130.0/255.0, blue: 110.0/255.0, alpha: 1.0)
-
+    
 }
 

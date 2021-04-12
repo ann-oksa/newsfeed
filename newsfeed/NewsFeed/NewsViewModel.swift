@@ -24,8 +24,8 @@ class NewsViewModel {
         
     }
     
-    private  var everything = GoogleNewsEverythingRequest(topic: "Grammy", dateFrom: "2021-04-05", dateTo: "2021-04-05", sortCriteria: .popularity)
     
+    var requestText = "Grammy"
     var modelsForNewsCell = [ModelForNewsCell]()
     var titleForNews = String()
     let googleNewsAPI: GoogleNewsAPI
@@ -66,18 +66,36 @@ class NewsViewModel {
         isInternetOn = Network.reachability.isReachable
         
         //This two dispatch we use only for test to check whether the status has changed because Reachability file doesn`t work on simulator
+        #if targetEnvironment(simulator)
         DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
             self.isInternetOn = false
         })
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
             self.isInternetOn = true
         })
-    }
-
-    func showNewsByEverythingRequest() {
+        #endif
         
+    }
+    
+    func newsFromTodayToTwoDaysAgo(text: String) -> GoogleNewsEverythingRequest {
+        let currentDate = Date()
+        let today = currentDate.convertedToString()
+        let twoDaysAgo = currentDate.dateTwoDaysAgo()?.convertedToString() ?? today
+        
+        let newsRequest = GoogleNewsEverythingRequest(topic: text, dateFrom: today, dateTo: twoDaysAgo , sortCriteria: .popularity)
+        return newsRequest
+    }
+    
+    func showNewsByEverythingRequest(with text: String) {
+        
+        requestText = text
+        
+        let newsRequest = newsFromTodayToTwoDaysAgo(text: requestText)
+        
+        modelsForNewsCell = []
         self.dataState = .loading
-        googleNewsAPI.fetchEverythingRequest(googleNewsEverythingRequest: everything) { (response) in
+        googleNewsAPI.fetchNewsByRequest(newsRequest) { (response) in
+            
             switch response {
             case .success(let result) :
                 var indexOfAppendingArticle: Int = 0
@@ -85,12 +103,12 @@ class NewsViewModel {
                     let modelForNewsCell = ModelForNewsCell(article: article)
                     self.modelsForNewsCell.append(modelForNewsCell)
                     indexOfAppendingArticle += 1
-                    if indexOfAppendingArticle > self.everything.pageSize - 1 {
+                    if indexOfAppendingArticle > newsRequest.pageSize - 1 {
                         break
                     }
                 }
                 self.lastUpdate = "Last update: \(String(describing: Date().timeAgoDisplay() ))"
-                self.titleForNews = self.everything.topic
+                self.titleForNews = newsRequest.topic
                 self.delegate?.setTitleForNews(newsTitle: self.titleForNews)
                 self.dataState = .available
                 
@@ -99,7 +117,7 @@ class NewsViewModel {
                 print("NewsViewModel -> showNewsByEverythingRequest -> can`t get successful result frrom response. Error \(error.code): \(error.message)")
                 self.dataState = self.modelsForNewsCell.isEmpty ? .empty : .available
             }
-            self.delegate?.updateDataForShowingNews()
+            
         }
     }
     
@@ -129,31 +147,5 @@ class NewsViewModel {
     
 }
 
-extension Date {
-    func timeAgoDisplay() -> String {
-        
-        let calendar = Calendar.current
-        let minuteAgo = calendar.date(byAdding: .minute, value: -1, to: Date())!
-        let hourAgo = calendar.date(byAdding: .hour, value: -1, to: Date())!
-        let dayAgo = calendar.date(byAdding: .day, value: -1, to: Date())!
-        let weekAgo = calendar.date(byAdding: .day, value: -7, to: Date())!
-        
-        if minuteAgo < self {
-            _ = Calendar.current.dateComponents([.second], from: self, to: Date()).second ?? 0
-            return "right now"
-        } else if hourAgo < self {
-            let diff = Calendar.current.dateComponents([.minute], from: self, to: Date()).minute ?? 0
-            return "\(diff) min ago"
-        } else if dayAgo < self {
-            let diff = Calendar.current.dateComponents([.hour], from: self, to: Date()).hour ?? 0
-            return "\(diff) hrs ago"
-        } else if weekAgo < self {
-            let diff = Calendar.current.dateComponents([.day], from: self, to: Date()).day ?? 0
-            return "\(diff) days ago"
-        }
-        let diff = Calendar.current.dateComponents([.weekOfYear], from: self, to: Date()).weekOfYear ?? 0
-        return "\(diff) weeks ago"
-    }
-    
-}
+
 

@@ -10,14 +10,14 @@
 import Foundation
 
 struct GoogleNewsEverythingRequest: CreatorQueryItemsProtocol {
-   //page page size
+   
     enum SortCriteria: String {
         case popularity = "popularity"
         case relevancy = "relevancy"
         case publishedAt = "publishedAt"
     }
     
-    let topic: String
+    var topic: String
     let dateFrom: String
     let dateTo: String
     let sortCriteria: SortCriteria
